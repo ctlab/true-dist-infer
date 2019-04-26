@@ -62,8 +62,4 @@ class AbstractGraph(nx.MultiGraph):
         for edge in bpg.edges(data='label'):
             a.add_edge(edge[0], edge[1], color=edge[2])
 
-        for edge in self.edges():
-            if edge[1] == 'telomere':
-                a.add_edge(edge[0], edge[0], color='red')
-
         a.draw(filename, prog=prog)
