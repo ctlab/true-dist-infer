@@ -21,6 +21,9 @@ class AbstractGraph(nx.MultiGraph):
     def p_odd(self):
         return self.count_components(lambda c: len(c) != len(c.edges) and len(c.edges) % 2 == 1)
 
+    def chr(self):
+        return (self.p_even() + self.p_odd()) / 2
+
     def p_m(self, m):
         return self.count_components(lambda c: len(c) != len(c.edges) and len(c.edges) == m)
 
