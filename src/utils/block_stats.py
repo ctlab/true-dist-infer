@@ -1,4 +1,9 @@
+import pandas as pd
+import networkx as nx
+
 from bisect import bisect_left, bisect_right
+from src.utils.parsers import columns
+from src.graphs.real_data_graph import RealDataGraph
 
 every_chr = lambda df, chr_f: [r for chr in df['chr'].unique() for r in chr_f(df.loc[df['chr'] == chr])]
 

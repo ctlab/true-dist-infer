@@ -6,7 +6,7 @@ sp_blocks_from_df = lambda df, sp: df.loc[df['species'] == sp]['block'].tolist()
 
 
 class RealDataGraph(AbstractGraph):
-    def build_not_grimm(self, df, sp1, sp2, cyclic=False):
+    def infercars(self, df, sp1, sp2, cyclic=False):
         def add_one_sp(label, sp):
             df_sp = df.loc[df['species'] == sp].sort_values(by=['chr', 'chr_beg'])
 
