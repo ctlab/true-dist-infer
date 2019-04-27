@@ -8,13 +8,6 @@ from src.estimators.dirichlet_db_estimator import DirichletDBEstimator, Correcte
 from src.utils.parsers import parse_to_df
 from src.utils.block_stats import dist_between_blocks
 
-# grimm_flag = True
-# file1 = "data/H.gen"
-# file2 = "data/M.gen"
-# file = "data/Conserved.Segments"
-# sp1 = "hg19"
-# sp2 = "mm10"
-# fit_alpha = True
 alpha = 1 / 3
 
 
