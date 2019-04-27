@@ -4,18 +4,16 @@ from src.estimators.flat_dirichlet_estimator import FlatDirichletDBEstimator
 from src.estimators.uniform_db_estimator import UniformDBEstimator
 from src.estimators.dirichlet_db_estimator import DirichletDBEstimator
 
-filename = "file_%d.svg"
 g = LinearGenomeGraph(1000, 10, "gamma", [1])
 
-dir_est = DirichletDBEstimator()
 uni_est = UniformDBEstimator()
-gam_est = DirichletDBEstimator(1)
+flat_dir_est = FlatDirichletDBEstimator()
+alpha1_3_dir_est = DirichletDBEstimator(1/3)
 
-for i in range(1000):
-    print(i)
+for i in range(300):
     g.do_k2_break()
 
-print(dir_est.predict_k(g.d(), g.b()))
-print(uni_est.predict_k(g.d(), g.b()))
-print(gam_est.predict_k(g.d(), g.b()))
+print(uni_est.predict_k(g))
+print(flat_dir_est.predict_k(g))
+print(alpha1_3_dir_est.predict_k(g))
 
