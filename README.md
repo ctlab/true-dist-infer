@@ -14,7 +14,7 @@ All graphs are presented in `graphs` package and have methods for counting requi
 - `c()` — number of cycles paths in graph;
 - `c_m(m)` — number of `m`-cycles paths in graph;
 - `n()` — number of all blocks in graph;
-- `d()` — the minimal DCJ distance between;
+- `d()` — the minimal DCJ distance;
 - `b()` — is half the number of breakpoints;
 - `save_pygraphviz(filename)` — save graph to `filename` file, 
 you can specify `.svg` exension of file for getting an image or do not specify for getting file in *pygraphviz* format.
@@ -22,8 +22,9 @@ you can specify `.svg` exension of file for getting an image or do not specify f
 #### Cyclic genomes
 Cyclic genome graphs are presented with `CyclicGenomeGraph` class in file `cyclic_genome_graph.py` file 
 and can be used for simulate genome rearrangements with `do_k2_break()` method. 
-You need to pass `n` to the constructor 
-and you can also pass distribution from `scipy.stats` library and it's params to constructor method for specifying fragilities distribution.
+
+Parameter `n` need to be passed to the constructor.
+Also, initial distribution can be passed by specifying `distribution` from `scipy.stats` library and it's `params` for its params.
 
 Examples:
 ```python
@@ -43,7 +44,7 @@ g.do_k2_break()
 
 #### Linear genomes
 Linear genome graphs are presented with `LinearGenomeGraph` class in file `linear_genome_graph.py` file.
-It's completely the same as a `CyclicGenomeGraph` in usage, but also need to specify the number of chromosomes parameter in the constructor.
+It's completely the same as a `CyclicGenomeGraph` in usage, but also need to specify the initial number of chromosomes in the constructor.
 
 Examples:
 ```python
@@ -84,7 +85,7 @@ This estimator assumes that probabilities are distributed with flat Dirichlet di
 
 #### Original Flat Dirichlet Estimator
 Implemented flat dirichlet estimator from [original paper](https://academic.oup.com/gbe/article/8/5/1427/2939585) is presented with with `TannierEstimator` class in `tannier_dbc2_estimator.py` file
-and also requires to pass `c(2)` parameter to `predict*()` methods. 
+and also requires to pass `c2` parameter to `predict*()` methods. 
 This estimator assumes that probabilities are distributed with flat Dirichlet distribution.
 
 #### Non-flat Dirichlet Estimator
@@ -98,15 +99,15 @@ This estimator assumes that probabilities are distributed with Dirichlet distrib
 You need to **pass `alpha` to constructor**.
 
 ## Usage examples
-This project has several code example and wrapped files for using real data.
-You can run it by yourself with your favorite IDE with specifying working directory as project directory 
-or using bash script.
+This project has some code example in the `src` folder and wrapped files for using real data.
+You can run it by yourself with your favorite IDE with specifying the working directory as the project directory 
+or using bash scripts.
 
 ### Real Data
 Estimating with real data is provided with `real_data_est.py` python file.
 You can pass parameters to this file by yourself or use bash scripts.
 
-### Real Data in `grimm` Format
+#### Real Data in `grimm` Format
 Real data in `grimm` format can be estimated with `run_estimate_grimm.sh` script.
 
 Example input:
@@ -123,7 +124,7 @@ Dirichlet estimator with alpha=0.3333333333333333, k: 408.27704725986126
 Corrected dirichlet estimator with alpha=0.3333333333333333, k: 408.27704725986126
 ```
 
-Also, you can **specify alpha** for the Dirichlet estimator by passing third parameter.
+Also, you can **specify alpha** for the Dirichlet estimator bypassing the third parameter.
 Example input:
 ```bash
 ./run_estimate_grimm.sh example_data/H.gen example_data/M.gen 0.42
@@ -138,7 +139,7 @@ Dirichlet estimator with alpha=0.42, k: 408.11174995732927
 Corrected dirichlet estimator with alpha=0.42, k: 408.11174995732927
 ```
 
-### Real Data in `infercars` Format
+#### Real Data in `infercars` Format
 Real data in `infercars` format can be estimated with `run_estimate_infercars.sh` script.
 
 ```bash
@@ -154,7 +155,7 @@ Dirichlet estimator with alpha=0.3333333333333333, k: 307.70047562385764
 Corrected dirichlet estimator with alpha=0.3333333333333333, k: 307.70047562385764
 ```
 
-Also, you can **specify alpha** for the Dirichlet estimator by passing fourth parameter.
+Also, you can **specify alpha** for the Dirichlet estimator by passing the fourth parameter.
 
 ```bash
 ./run_estimate_infercars.sh example_data/Conserved.Segments hg19 mm10 0.42
@@ -169,7 +170,7 @@ Dirichlet estimator with alpha=0.42, k: 306.68783805301905
 Corrected dirichlet estimator with alpha=0.42, k: 309.5213404589687
 ```
 
-Or **fit alpha** for the Dirichlet estimator by passing keyword `fit` as fourth parameter.
+Or **fit alpha** for the Dirichlet estimator by passing keyword `fit` as the fourth parameter.
 
 ```bash
 ./run_estimate_infercars.sh example_data/Conserved.Segments hg19 mm10 fit
@@ -193,4 +194,5 @@ Also, you can take a look at the source code of that file and change used graph 
 Draw example is provided in `draw_example.py` python file and `run_drawer_example.sh` bash script.
 Also, you can look at the source code of that file, it's pretty easy and you can draw almost any graph.
 Here is example of output picture.
+
 ![Breakpoint example](example.svg)
