@@ -1,3 +1,5 @@
+# TruEst: the estimator of true evolutionary distance under the INFER model
+
 ## Requirements
 You need installed **Python 3** and have bash alias `python` for it. 
 Also, some libraries are required: `numpy, scipy, networkx, pygraphviz`.
