@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-PYTHONPATH=. python src/estimation_example.py
+PYTHONPATH=. python3 src/estimation_example.py

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-PYTHONPATH=. python src/real_data_est.py grimm $1 $2 $3
+PYTHONPATH=. python3 src/real_data_est.py grimm $1 $2 $3
 
