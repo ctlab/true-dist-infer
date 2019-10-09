@@ -107,95 +107,116 @@ You can run it by yourself with your favorite IDE with specifying the working di
 or using bash scripts.
 
 ### Real Data
-Estimating with real data is provided with `real_data_est.py` python file.
+Estimating with real data is provided with `real_data_est_grimm.py` and `real_data_est_infercars.py` python files.
 You can pass parameters to this file by yourself or use bash scripts.
+Also you can always **use `-h` option to get help**.
 
 #### Real Data in `grimm` Format
 Real data in `grimm` format can be estimated with `run_estimate_grimm.sh` script.
 
-Example input:
+You can pass `-h/--help` option to get help:
+```
+$ ./run_estimate_grimm.sh -h
+usage: real_data_est_grimm.py [-h] --file1 FILE1 --file2 FILE2 [--alpha ALPHA]
+                              [--stats]
+
+Construct a breakpoint graph with real data provided in grimm format. Then
+calculates the necessary statistics and estimate true evolutionary distance
+using different approaches.
+
+required arguments:
+  --file1 FILE1, -f1 FILE1
+                        Path to first file in grimm format
+  --file2 FILE2, -f2 FILE2
+                        Path to second file in grimm format
+
+optional arguments:
+  --alpha ALPHA, -a ALPHA
+                        Set alpha to a specific value. Float, default value is
+                        0.33
+  --stats, -s           Show main statistics of the graph: b, d, p_even, p_odd
+                        and paths and cycles count
+
+```
+
+### Input examples:
 ```bash
-./run_estimate_grimm.sh example_data/H.gen example_data/M.gen
+./run_estimate_grimm.sh --file1 example_data/H.gen --file2 example_data/M.gen
 ```
 
-Example output:
-```
-d=408, b=530.5
-Uniform estimator, k: 407.83309975090975
-Flat Dirichlet estimator, k: 408.06655523000336
-Dirichlet estimator with alpha=0.3333333333333333, k: 408.27704725986126
-Corrected dirichlet estimator with alpha=0.3333333333333333, k: 408.27704725986126
-```
-
-Also, you can **specify alpha** for the Dirichlet estimator bypassing the third parameter.
-Example input:
+**Specifying alpha** for the Dirichlet estimator:
 ```bash
-./run_estimate_grimm.sh example_data/H.gen example_data/M.gen 0.42
+./run_estimate_grimm.sh --file1 example_data/H.gen --file2 example_data/M.gen --alpha 0.5
 ```
 
-Example output:
-```
-d=408, b=530.5
-Uniform estimator, k: 407.83309975090975
-Flat Dirichlet estimator, k: 408.06655523000336
-Dirichlet estimator with alpha=0.42, k: 408.11174995732927
-Corrected dirichlet estimator with alpha=0.42, k: 408.11174995732927
+**Getting** additional statistics:
+```bash
+./run_estimate_grimm.sh --file1 example_data/H.gen --file2 example_data/M.gen --stats
 ```
 
 #### Real Data in `infercars` Format
 Real data in `infercars` format can be estimated with `run_estimate_infercars.sh` script.
 
-```bash
-./run_estimate_infercars.sh example_data/Conserved.Segments hg19 mm10
+You can pass `-h/--help` option to get help:
+
+```
+$ ./run_estimate_infercars.sh -h
+usage: real_data_est_infercars.py [-h] --file FILE --species1 SPECIES1
+                                  --species2 SPECIES2 [--fit_alpha]
+                                  [--alpha ALPHA] [--stats]
+
+Construct a breakpoint graph with real data provided in infercars format. Then
+calculates the necessary statistics and estimate true evolutionary distance
+using different approaches.
+
+required arguments:
+  --file FILE, -f FILE  Path to file in infercars format
+  --species1 SPECIES1, -s1 SPECIES1
+                        Name of first species
+  --species2 SPECIES2, -s2 SPECIES2
+                        Name of second species
+
+optional arguments:
+  --fit_alpha, -fa      Fit alpha
+  --alpha ALPHA, -a ALPHA
+                        Set alpha to a specific value. Float value, default is
+                        0.33
+  --stats, -s           Show main statistics of the graph: b, d, p_even, p_odd
+                        and paths and cycles count
 ```
 
-Example output:
+### Input examples:
+Minimal working example:
+```bash
+./run_estimate_grimm.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10
 ```
-d=291, b=334.5
+
+You can specify alpha and get additional statistics as in `grimm` format:
+```bash
+./run_estimate_grimm.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10 --alpha 0.5 --stats
+```
+
+Or **fit alpha** for the Dirichlet estimator by passing `--fit_alpha/-fa` option.
+
+```bash
+./run_estimate_infercars.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10 --fit_alpha
+```
+
+#### Output example:
+```
 Uniform estimator, k: 294.52810322545884
 Flat Dirichlet estimator, k: 302.5027390481186
 Dirichlet estimator with alpha=0.3333333333333333, k: 307.70047562385764
 Corrected dirichlet estimator with alpha=0.3333333333333333, k: 307.70047562385764
 ```
 
-Also, you can **specify alpha** for the Dirichlet estimator by passing the fourth parameter.
-
-```bash
-./run_estimate_infercars.sh example_data/Conserved.Segments hg19 mm10 0.42
-```
-
-Example output:
-```
-d=291, b=334.5
-Uniform estimator, k: 294.52810322545884
-Flat Dirichlet estimator, k: 302.5027390481186
-Dirichlet estimator with alpha=0.42, k: 306.68783805301905
-Corrected dirichlet estimator with alpha=0.42, k: 309.5213404589687
-```
-
-Or **fit alpha** for the Dirichlet estimator by passing keyword `fit` as the fourth parameter.
-
-```bash
-./run_estimate_infercars.sh example_data/Conserved.Segments hg19 mm10 fit
-```
-
-Example output:
-```
-Alpha fitted, alpha=0.07755545378416945
-d=291, b=334.5
-Uniform estimator, k: 294.52810322545884
-Flat Dirichlet estimator, k: 302.5027390481186
-Dirichlet estimator with alpha=0.07755545378416945, k: 311.704858218553
-Corrected dirichlet estimator with alpha=0.07755545378416945, k: 311.704858218553
-```
-
 ### Estimation After `k` Breaks
 Estimating after `k` breaks in simulations example is provided in `estimation_example.py` python file and `run_etimation_example.sh` bash script.
-Also, you can take a look at the source code of that file and change used graph or number of steps.
+Also, you can take a look at the source code of that file and easily change used graph or number of steps.
 
 ### Draw Graph Example
 Draw example is provided in `draw_example.py` python file and `run_drawer_example.sh` bash script.
-Also, you can look at the source code of that file, it's pretty easy and you can draw almost any graph.
+Also, you can look at the source code of that file, it's pretty easy and you can draw any breakpoint graph.
 Here is example of output picture.
 
 ![Breakpoint example](example.svg)

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-PYTHONPATH=. python3 src/real_data_est.py infercars $1 $2 $3 $4
+PYTHONPATH=. python3 src/real_data_est_infercars.py "$@"
