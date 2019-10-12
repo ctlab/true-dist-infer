@@ -188,12 +188,12 @@ optional arguments:
 ### Input examples:
 Minimal working example:
 ```bash
-./run_estimate_grimm.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10
+./run_estimate_infercars.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10
 ```
 
 You can specify alpha and get additional statistics as in `grimm` format:
 ```bash
-./run_estimate_grimm.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10 --alpha 0.5 --stats
+./run_estimate_infercars.sh --file example_data/Conserved.Segments --species1 hg19 --species2 mm10 --alpha 0.5 --stats
 ```
 
 Or **fit alpha** for the Dirichlet estimator by passing `--fit_alpha/-fa` option.
