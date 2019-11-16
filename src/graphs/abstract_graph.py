@@ -15,7 +15,8 @@ class AbstractGraph(nx.MultiGraph):
         raise NotImplementedError('subclasses must override construct_bp_graph!')
 
     def count_components_with_predicate(self, predicate):
-        return len(list(filter(predicate, nx.connected_component_subgraphs(self.construct_bp_graph()))))
+        g = self.construct_bp_graph()
+        return len(list(filter(lambda ns: predicate(g.subgraph(ns)), nx.connected_components(g))))
 
     def p_even(self):
         return self.count_components_with_predicate(lambda c: len(c) != len(c.edges) and len(c.edges) % 2 == 0)
@@ -43,14 +44,18 @@ class AbstractGraph(nx.MultiGraph):
 
     def b(self):
         b = 0.0
-        for component in nx.connected_component_subgraphs(self.construct_bp_graph()):
+        g = self.construct_bp_graph()
+        for ns in nx.connected_components(g):
+            component = g.subgraph(ns)
             if len(component) > 2 or (len(component) == 2 and len(component.edges) == 1):
                 b += len(component) / 2
         return b
 
     def count_paths_and_cycles(self):
         cycles, paths = defaultdict(lambda: 0), defaultdict(lambda: 0)
-        for c in nx.connected_component_subgraphs(self.construct_bp_graph()):
+        g = self.construct_bp_graph()
+        for ns in nx.connected_components(g):
+            c = g.subgraph(ns)
             if len(c) == len(c.edges):
                 cycles[len(c) // 2] += 1
             else:
