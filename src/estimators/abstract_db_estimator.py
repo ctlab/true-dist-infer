@@ -13,6 +13,7 @@ class AbstractDBEstimator:
 
         d = g.d()
         b = g.b()
+        if d >= b - 1e-6: d = d - 1e-1
         x = optimize.bisect(d_over_b(d / b), 1e-6, 3, xtol=1e-4)
 
         b_n = self.b_over_n(x)

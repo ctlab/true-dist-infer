@@ -1,6 +1,5 @@
 import math
 import networkx as nx
-import pygraphviz as pgv
 
 from collections import defaultdict
 
@@ -70,6 +69,7 @@ class AbstractGraph(nx.MultiGraph):
                                math.sin(math.pi / self.n() * ind) * radius)
 
         bpg = self.construct_bp_graph()
+        import pygraphviz as pgv
         a = pgv.AGraph(strict=False)
 
         for node in bpg.nodes:
