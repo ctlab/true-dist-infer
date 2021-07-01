@@ -3,6 +3,7 @@ from src.graphs.real_data_graph import RealDataGraph
 from src.estimators.flat_dirichlet_estimator import FlatDirichletDBEstimator
 from src.estimators.uniform_db_estimator import UniformDBEstimator
 from src.estimators.dirichlet_db_estimator import DirichletDBEstimator, CorrectedDirichletDBEstimator
+from src.real_data_est_common import print_graph_stats
 
 from ete3 import Tree
 from itertools import combinations
@@ -45,16 +46,17 @@ def construct_A(sp_pairs, t):
     return A
 
 
-def count_distances_bp(sp_pairs, df, etimators, cache_file):
+def count_distances_bp(sp_pairs, df, etimators, cache_file, cyclic):
     if os.path.isfile(cache_file):
         with open(cache_file, 'rb') as f:
             print('reading distances from cache')
             distances = pickle.load(f)
     else:
         distances = {}
-        for sp1, sp2 in sp_pairs:
+        for i, (sp1, sp2) in enumerate(sp_pairs):
+            print(f'{i} of {len(sp_pairs)}: {sp1}–{sp2}')
             g = RealDataGraph()
-            g.infercars(df, sp1, sp2)
+            g.infercars(df, sp1, sp2, cyclic=cyclic)
 
             for est_name, est in etimators.items():
                 distances[(sp1, sp2, est_name)] = est.predict(g)[1]
@@ -79,14 +81,14 @@ def filter_alt_(df):
     return df.loc[df['block'].isin(allowed_blocks)].copy()
 
 
-def __count_species_distances(infercars_file, filter_alt=True):
+def __count_species_distances(infercars_file, cyclic, filter_alt=True):
     df = parse_to_df(infercars_file)
     if filter_alt: df = filter_alt_(df)
     species = df.species.unique()
     sp_pairs = list(combinations(species, 2))
 
     cache_file = infercars_file + '.cache.pkl'
-    distances = count_distances_bp(sp_pairs, df, etimators, cache_file)
+    distances = count_distances_bp(sp_pairs, df, etimators, cache_file, cyclic=cyclic)
 
     return distances, sp_pairs
 
@@ -111,7 +113,7 @@ def __fit_to_tree(sp_pairs, distances, est_name, tree_file, unroot):
 
 
 def fit_to_tree_graphviz(tree_file, infercars_file, est_name, graphviz_file, table_file, filter_alt=True, round=2,
-                         unroot=True):
+                         unroot=True, cyclic=False):
     import pygraphviz as pgv
 
     def rec_convert_t_to_graphviz(n, g, edge_to_w, acc_name):
@@ -122,7 +124,7 @@ def fit_to_tree_graphviz(tree_file, infercars_file, est_name, graphviz_file, tab
             g.add_edge(acc_name, child_name, label=w.round(round))
             rec_convert_t_to_graphviz(child, g, edge_to_w, child_name)
 
-    distances, sp_pairs = __count_species_distances(infercars_file, filter_alt)
+    distances, sp_pairs = __count_species_distances(infercars_file, cyclic, filter_alt)
     t, ws, y, y_tree = __fit_to_tree(sp_pairs, distances, est_name, tree_file, unroot)
 
     edge_to_w = {frozenset(e[0]): w for e, w in zip(t.iter_edges(), ws)}
@@ -136,22 +138,26 @@ def fit_to_tree_graphviz(tree_file, infercars_file, est_name, graphviz_file, tab
             print(sp1, sp2, y_, y_tree_.round(round), sep=',', file=f)
 
 
-def count_tree_errors(tree_file, infercars_file, dh, alignment_type, filter_alt=True,
-                      error_func=lambda y, y_tree: np.sqrt(np.sum(np.power((y - y_tree) / y, 2))), unroot=True):
-    distances, sp_pairs = __count_species_distances(infercars_file, filter_alt)
-    for sp1, sp2 in sp_pairs:
-        distances[(sp1, sp2, alignment_type)] = dh.get_dist(sp1, sp2)
+def count_tree_errors(tree_file, infercars_file, dh=None, alignment_type=None, filter_alt=True,
+                      error_func=lambda y, y_tree: np.sqrt(np.sum(np.power((y - y_tree) / y, 2))), unroot=True,
+                      cyclic=False):
+    distances, sp_pairs = __count_species_distances(infercars_file, cyclic, filter_alt)
+
+    if alignment_type != None:
+        for sp1, sp2 in sp_pairs:
+            distances[(sp1, sp2, alignment_type)] = dh.get_dist(sp1, sp2)
 
     errors = {}
-    for est in chain(etimators, [alignment_type]):
+    ls = etimators if alignment_type == None else chain(etimators, [alignment_type])
+    for est in ls:
         _1, _2, y, y_tree = __fit_to_tree(sp_pairs, distances, est, tree_file, unroot)
         errors[est] = error_func(y, y_tree)
 
     return errors
 
 
-def count_alignment_pairs_alignment(infercars_file, distance_holder, filter_alt=True):
-    distances, sp_pairs = __count_species_distances(infercars_file, filter_alt)
+def count_alignment_pairs_alignment(infercars_file, distance_holder, filter_alt=True, cyclic=False):
+    distances, sp_pairs = __count_species_distances(infercars_file, cyclic, filter_alt)
 
     al_ds = [distance_holder.get_dist(sp1, sp2) for sp1, sp2 in sp_pairs]
     est_ds = {est: [distances[(sp1, sp2, est)] for sp1, sp2 in sp_pairs]for est in etimators}
@@ -166,8 +172,8 @@ def count_correlation_score(xs, ys, fit_intercept=True):
     return reg.score(xs, ys)
 
 
-def count_correlation_pairs_alignment(infercars_file, distance_holder, filter_alt=True):
-    distances, sp_pairs = __count_species_distances(infercars_file, filter_alt)
+def count_correlation_pairs_alignment(infercars_file, distance_holder, filter_alt=True, cyclic=False):
+    distances, sp_pairs = __count_species_distances(infercars_file, cyclic, filter_alt)
 
     tree_ds = [distance_holder.get_dist(sp1, sp2) for sp1, sp2 in sp_pairs]
     corrs = {}

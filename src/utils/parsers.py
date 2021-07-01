@@ -2,7 +2,7 @@ import re
 import numpy as np
 import pandas as pd
 
-p = "([A-Za-z0-9]+)\.([A-Za-z0-9_]+):(\d+)-(\d+) ([+|-]).*"
+p = "([A-Za-z0-9_\(\)\/\s\.-]+)\.([A-Za-z0-9_]+):(\d+)-(\d+) ([+|-]).*"
 pattern = re.compile(p)
 columns = ["block", "species", "chr", "chr_beg", "chr_end", "orientation"]
 
@@ -33,3 +33,11 @@ def parse_grimm_file(file):
             split = list(map(lambda x: int(x), line.split()[:-1]))
             lss.append(split)
     return lss
+
+def export_df_to_infercars(df, file_name):
+    with open(file_name, 'w') as f:
+        for block, block_df in df.groupby('block'):
+            print(f'>{block}', file=f)
+            for i, row in block_df.iterrows():
+                print(f'{row["species"]}.{row["chr"]}:{row["chr_beg"]}-{row["chr_end"]} {row["orientation"]}', file=f)
+            print(file=f)

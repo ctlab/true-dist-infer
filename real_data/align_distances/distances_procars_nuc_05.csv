@@ -1,0 +1,13 @@
+,homo_sapiens,pan_troglodytes,pongo_abelii,macaca_mulatta,mus_musculus,rattus_norvegicus,bos_taurus,equus_caballus,canis_familiaris,monodelphis_domestica,taeniopygia_guttata,gallus_gallus
+homo_sapiens,,,,,,,,,,,,
+pan_troglodytes,0.00785,,,,,,,,,,,
+pongo_abelii,0.01859,0.01870,,,,,,,,,,
+macaca_mulatta,0.03247,0.03239,0.03274,,,,,,,,,
+mus_musculus,0.23412,0.23291,0.23303,0.23451,,,,,,,,
+rattus_norvegicus,0.23567,0.23440,0.23464,0.23607,0.07667,,,,,,,
+bos_taurus,0.17523,0.17345,0.17388,0.17556,0.26925,0.27039,,,,,,
+equus_caballus,0.14395,0.14251,0.14273,0.14299,0.24321,0.24422,0.14425,,,,,
+canis_familiaris,0.16179,0.16027,0.16064,0.16260,0.25846,0.25960,0.16262,0.13132,,,,
+monodelphis_domestica,0.46127,0.45562,0.45508,0.45136,0.52051,0.52150,0.47442,0.44751,0.45768,,,
+taeniopygia_guttata,0.67468,0.66707,0.66326,0.65988,0.72067,0.72062,0.68464,0.65842,0.67171,0.68910,,
+gallus_gallus,0.64476,0.63820,0.63330,0.63141,0.69106,0.69163,0.65686,0.63023,0.64233,0.65096,0.24268,
