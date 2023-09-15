@@ -71,7 +71,7 @@ class LinearGenomeGraph(AbstractGraph):
             # Breaking chromosome
             if i1 == i2:
                 if e1[1] != 'telomere':
-                    print("________Breaking_chromosome")
+                    # print("________Breaking_chromosome")
                     delete_edge(e1)
                     p1, p2 = new_probabilities(e1[2]['probability'])
                     insert_edge((e1[0], 'telomere', p1))
@@ -82,7 +82,7 @@ class LinearGenomeGraph(AbstractGraph):
 
             # Merging chromosome
             if e1[1] == 'telomere' and e2[1] == 'telomere':
-                print("________Merging_chromosome")
+                # print("________Merging_chromosome")
                 delete_edge(e1)
                 delete_edge(e2)
                 insert_edge((e1[0], e2[0], e1[2]['probability'] + e2[2]['probability']), label='adj-red')
